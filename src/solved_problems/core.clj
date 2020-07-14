@@ -1,5 +1,5 @@
 (ns solved-problems.core
-  (:gen-class))
+  (:require [solved-problems.helper :refer :all]))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -12,7 +12,7 @@
    we get 3, 5, 6 and 9. The sum of these multiples is 23.
    Find the sum of all the multiples of 3 or 5 below 1000."
   []
-  (let [multiples (filter #(or (= 0 (mod % 3)) (= 0 (mod % 5)))
+  (let [multiples (filter #(or (zero? (mod % 3)) (zero? (mod % 5)))
                           (range 1 1001))]
     (reduce #(+ %1 %2) multiples)))
 (problem-one)
@@ -36,6 +36,11 @@
   "The prime factors of 13195 are 5, 7, 13 and 29.
   What is the largest prime factor of the number 600851475143 ?"
   []
-  1)
-
+  (loop [number (bigint 3) last -1]
+    (if (<= number (Math/sqrt (bigint 600851475143)))
+      (if (and (prime? number)
+               (zero? (mod (bigint 600851475143) number)))
+        (recur (+ number 2) number)
+        (recur (+ number 2) last))
+      last)))
 (problem-three)
