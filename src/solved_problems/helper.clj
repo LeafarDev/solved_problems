@@ -1,7 +1,6 @@
 (ns solved-problems.helper
   (:gen-class))
 
-
 (defn fact [number]
   (loop [n number factorial 1]
     (if (zero? n)
@@ -31,3 +30,13 @@
     (or (zero? (mod x 2))
         (zero? (mod x 3))) false
     :else (test-prime x)))
+
+(defn key-to-int [key]
+  (bigint (subs (str key) 1)))
+
+(defn next-prime
+  [number]
+  (loop [n number]
+    (if (prime? (inc n))
+      (inc n)
+      (recur (inc n)))))
