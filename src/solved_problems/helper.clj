@@ -40,3 +40,66 @@
     (if (prime? (inc n))
       (inc n)
       (recur (inc n)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; MATRIZ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn extract-diagonal
+  [line column matriz baixo direita]
+  (when (or (and (true? baixo) (<= line 16)
+                 (or (and (false? direita) (>= column 4))
+                     (and (true? direita) (<= column 16))))
+            (and (false? baixo) (>= line 4)
+                 (or (and (false? direita) (>= column 4))
+                     (and (true? direita) (<= column 16)))))
+    (loop [line line column column values []]
+      (if (< (count values) 4)
+        (recur (if baixo
+                 (inc line)
+                 (dec line))
+               (if direita
+                 (inc column)
+                 (dec column))
+               (conj values (nth (nth matriz line) column)))
+        values))))
+
+(defn extract-vertical
+  [line column matriz]
+  (when (and (<= line 19) (>= line 0) (<= column 19) (>= column 0))
+    (map #(nth % column) (subvec matriz (- line 4) line))))
+
+(defn extract-horizontal
+  [line column matriz]
+  (when (and (<= line 19) (>= line 0) (<= column 19) (>= column 0))
+    (subvec (nth matriz line) column (+ column 4))))
+
+(defn noroeste
+  [line column matriz]
+  (reduce * (extract-diagonal line column matriz false false)))
+
+(defn nordeste
+  [line column matriz]
+  (reduce * (extract-diagonal line column matriz false true)))
+
+(defn sudoeste
+  [line column matriz]
+  (reduce * (extract-diagonal line column matriz true false)))
+
+(defn sudeste
+  [line column matriz]
+  (reduce * (extract-diagonal line column matriz true true)))
+
+(defn norte
+  [line column matriz]
+  (when (>= line 4)
+    (reduce * (extract-vertical line column matriz))))
+
+(defn sul [line column matriz]
+  (when (<= line 16)
+    (reduce * (extract-vertical (+ line 4) column matriz))))
+
+(defn leste [line column matriz]
+  (when (<= column 16)
+    (reduce * (extract-horizontal line column matriz))))
+
+(defn oeste [line column matriz]
+  (when (>= column 4)
+    (reduce * (extract-horizontal line (- column 4) matriz))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
