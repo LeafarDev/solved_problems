@@ -5,7 +5,7 @@
   (loop [n number factorial 1]
     (if (zero? n)
       factorial
-      (recur (- n 1) (*' factorial n)))))
+      (recur (dec n) (*' factorial n)))))
 
 (defn slow-prime? [n]
   (if (> n 2)

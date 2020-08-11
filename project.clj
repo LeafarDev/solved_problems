@@ -7,4 +7,5 @@
   :main ^:skip-aot solved-problems.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
-  :plugins [[lein-cljfmt "0.6.5"]])
+  :plugins [[lein-cljfmt "0.6.5"]
+            [lein-kibit "0.1.8"]])
